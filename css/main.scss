@@ -1,0 +1,29 @@
+html {
+
+}
+
+.player-container {
+    display: inline-block;
+    vertical-align: top;
+
+    width: 25%;
+    padding: 20px;
+
+    img {
+        width: 30px;
+        height: 30px;
+        display: inline-block;
+    }
+
+    div {
+        margin-bottom: 10px;
+    }
+
+    input {
+        margin-left: 10px;
+        margin-right: 10px;
+
+        width: 30px;
+    }
+
+}
