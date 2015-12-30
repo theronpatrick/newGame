@@ -1,3 +1,13 @@
+body {
+  padding: 30px;
+  background-image: url("../img/bg.png");
+  background-size: 100%;
+}
+
+h1, h2, p {
+  color: white;
+}
+
 .player-container {
   display: inline-block;
   vertical-align: top;
@@ -16,4 +26,19 @@
   margin-left: 10px;
   margin-right: 10px;
   width: 30px;
+}
+
+.card {
+  width: 250px;
+  height: 350px;
+  border: 1px solid black;
+  display: inline-block;
+  vertical-align: top;
+  margin-right: 20px;
+  padding: 20px;
+  background-color: #EDBA85;
+}
+
+.card-container {
+  margin-top: 10px;
 }
