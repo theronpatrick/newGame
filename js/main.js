@@ -1,8 +1,8 @@
 $(document).ready(function() {
-    console.log("sup1");
 
     function init() {
         initFastClick();
+        initGlobals();
         initCards();
         attachHandlers();
     }
@@ -13,7 +13,23 @@ $(document).ready(function() {
         });
     }
 
-    var deck = [];
+    
+    function initGlobals() {
+        this.deck = [];
+        this.player = {
+            score: 0
+        }
+        refreshScore();
+    }
+
+    function refreshScore() {
+        $(".point-total").text(player.score);
+
+        if (player.score >= 100) {
+            alert("Awwwww yissss you win!");
+        }
+    }
+
     function initCards() {
         // Get cards
         var originalCards;
@@ -27,15 +43,14 @@ $(document).ready(function() {
             $.each(cards, function() {
                 deck.push({
                     name: this["gsx$name"]["$t"],
-                    description: this["gsx$description"]["$t"]
+                    description: this["gsx$description"]["$t"],
+                    cooldown: this["gsx$cooldown"]["$t"],
                 });
             });
 
-            console.log("cards are" , deck);
-
             shuffle(deck);
+            console.log("deck is " , deck);
             drawThreeCards();
-
 
         });
     }
@@ -54,11 +69,26 @@ $(document).ready(function() {
             var card = deck.pop();
 
             $(domCards[i]).find("h2").text(card.name);
-            $(domCards[i]).find("p").text(card.description);
+            $(domCards[i]).find(".description").text(card.description);
+            $(domCards[i]).find(".cooldown").text("Cooldown: " + card.cooldown + " seconds");
 
         }
 
-        console.log("deck now is " , deck);
+    }
+
+    function drawCard(card) {
+
+        if (deck.length == 0) {
+            $(card).find("h2").text("Out of cards");
+            $(card).find("p").text("");
+            return;
+        }
+
+        var newCard = deck.pop();
+
+        $(card).find("h2").text(newCard.name);
+        $(card).find(".description").text(newCard.description);
+        $(card).find(".cooldown").text("Cooldown: " + newCard.cooldown + " seconds");
     }
 
     function shuffle(o){
@@ -92,6 +122,45 @@ $(document).ready(function() {
         $(".new-deck").click(function() {
             initCards();
         })
+
+        $(".card").click(function(e) {
+            cardClickHandler(e);
+        })
+    }
+
+    function cardClickHandler(e) {
+        var card = $(e.target);
+        var cooldown = card.find(".cooldown").text();
+        cooldown = cooldown.replace(" seconds", "");
+        cooldown = cooldown.replace("Cooldown: ", "");
+        cooldown = parseFloat(cooldown) * 1000;
+
+
+        var description = card.find(".description").text();
+
+        if (description.search("plus") > -1) {
+            description = description.replace("plus ", "");
+            description = parseInt(description);
+            player.score = player.score + description;
+        } else if (description.search("minus") > -1) {
+            description = description.replace("minus ", "");
+            description = parseInt(description);
+            player.score = player.score - description;
+        } 
+
+        refreshScore();
+
+        card.animate({
+            "opacity": 0
+        }, 10, function() {
+            drawCard(card);
+            card.animate({
+                opacity: 1,
+            }, cooldown);
+        });
+
+        
+
     }
 
     init();

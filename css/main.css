@@ -1,7 +1,19 @@
+html {
+  height: 100%;
+}
+
 body {
   padding: 30px;
-  background-image: url("../img/bg.png");
-  background-size: 100%;
+  height: auto;
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#6b401b+0,4c261f+100 */
+  background: #6b401b;
+  /* Old browsers */
+  background: -moz-linear-gradient(top, #6b401b 0%, #4c261f 100%);
+  /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, #6b401b 0%, #4c261f 100%);
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #6b401b 0%, #4c261f 100%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 }
 
 h1, h2, p {
@@ -11,8 +23,6 @@ h1, h2, p {
 .player-container {
   display: inline-block;
   vertical-align: top;
-  width: 25%;
-  padding: 20px;
 }
 .player-container img {
   width: 30px;
@@ -36,7 +46,15 @@ h1, h2, p {
   vertical-align: top;
   margin-right: 20px;
   padding: 20px;
-  background-color: #EDBA85;
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#011e26+0,011e26+72,707070+100 */
+  background: #011e26;
+  /* Old browsers */
+  background: -moz-linear-gradient(top, #011e26 0%, #011e26 72%, #707070 100%);
+  /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, #011e26 0%, #011e26 72%, #707070 100%);
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #011e26 0%, #011e26 72%, #707070 100%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 }
 
 .card-container {
