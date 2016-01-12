@@ -173,20 +173,20 @@ $(document).ready(function() {
             drawCard(card);
             card.animate({
                 opacity: 1,
-            }, cooldown);
+            }, cooldown, function() {
+                showCardReady(card);
+            });
         });
 
     }
 
     function cardDiscardHandler(e) {
 
-        console.log("in discard");
         var card = $(e.target).parents(".card");
 
         var discardText = $(".discard-text");
 
         if (card.is(':animated') || discardText.is(":animated")) {
-            console.log("cancelling")
             return;
         }
 
@@ -206,10 +206,21 @@ $(document).ready(function() {
             discardText.animate({
                 opacity: 1,
             }, player.cooldownLength, function() {
-                console.log("cmon")
+                showCardReady(card);
             });
         });
 
+    }
+
+    function showCardReady(card) {
+        console.log("in show");
+        // TODO: Find something better like a border
+        card.animate({
+            "border": "-20"
+        }, 100)
+        .animate({
+            "margin-top": 0
+        }, 100)
     }
 
     init();
