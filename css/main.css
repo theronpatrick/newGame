@@ -46,17 +46,17 @@ h1, h2, p {
   vertical-align: top;
   margin-right: 20px;
   padding: 20px;
-  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#011e26+0,011e26+72,707070+100 */
-  background: #011e26;
-  /* Old browsers */
-  background: -moz-linear-gradient(top, #011e26 0%, #011e26 72%, #707070 100%);
-  /* FF3.6-15 */
-  background: -webkit-linear-gradient(top, #011e26 0%, #011e26 72%, #707070 100%);
-  /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom, #011e26 0%, #011e26 72%, #707070 100%);
-  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  background-color: #212121;
 }
 
 .card-container {
   margin-top: 10px;
+}
+
+.discard-text, .new-deck {
+  background: #212121;
+  color: white;
+  padding: 5px;
+  display: inline-block;
+  border: 1px solid black;
 }

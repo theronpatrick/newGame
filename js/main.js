@@ -17,16 +17,19 @@ $(document).ready(function() {
     function initGlobals() {
         this.deck = [];
         this.player = {
-            score: 0
+            score: 0,
+            cooldownLength: 3000
         }
+        this.gameOver = false;
         refreshScore();
     }
 
     function refreshScore() {
         $(".point-total").text(player.score);
 
-        if (player.score >= 100) {
+        if (player.score >= 200 && !gameOver) {
             alert("Awwwww yissss you win!");
+            gameOver = true;
         }
     }
 
@@ -124,12 +127,26 @@ $(document).ready(function() {
         })
 
         $(".card").click(function(e) {
+            if ($(e.target).is("button")) {
+                return;
+            }
+
             cardClickHandler(e);
+        })
+
+        $(".card").find("button").click(function(e) {
+            cardDiscardHandler(e);
         })
     }
 
     function cardClickHandler(e) {
+        console.log("in clicky")
         var card = $(e.target);
+
+        if (card.is(':animated')) {
+            return;
+        }
+
         var cooldown = card.find(".cooldown").text();
         cooldown = cooldown.replace(" seconds", "");
         cooldown = cooldown.replace("Cooldown: ", "");
@@ -159,7 +176,39 @@ $(document).ready(function() {
             }, cooldown);
         });
 
-        
+    }
+
+    function cardDiscardHandler(e) {
+
+        console.log("in discard");
+        var card = $(e.target).parents(".card");
+
+        var discardText = $(".discard-text");
+
+        if (card.is(':animated') || discardText.is(":animated")) {
+            console.log("cancelling")
+            return;
+        }
+
+
+        card.animate({
+            "opacity": 0
+        }, 10, function() {
+            drawCard(card);
+            card.animate({
+                opacity: 1,
+            }, player.cooldownLength);
+        });
+
+        discardText.animate({
+            "opacity": 0
+        }, 10, function() {
+            discardText.animate({
+                opacity: 1,
+            }, player.cooldownLength, function() {
+                console.log("cmon")
+            });
+        });
 
     }
 
