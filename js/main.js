@@ -89,6 +89,7 @@ $(document).ready(function() {
             });
 
             shuffle(deck);
+            console.log("hrnm " , deck);
             drawThreeCards();
 
         });
@@ -145,19 +146,6 @@ $(document).ready(function() {
     }
 
     function attachHandlers() {
-        $(".minus").click(function() {
-            var amount = $(this).parent().find("input");
-            var value = amount.val();
-            value = parseInt(value) - 10;
-            amount.val(value);
-        })
-
-        $(".plus").click(function() {
-            var amount = $(this).parent().find("input");
-            var value = amount.val();
-            value = parseInt(value) + 10;
-            amount.val(value);
-        })
 
         $("input").submit(function(e) {
             e.preventDefault();
@@ -185,27 +173,26 @@ $(document).ready(function() {
     function cardClickHandler(e) {
         var card = $(e.target);
 
+        // Clicking on titles gives a different target, so need this check
+        if (!card.hasClass("card")) {
+            card = card.parents(".card");
+        }
+
         if (card.is(':animated')) {
             return;
         }
 
-        var cooldown = card.find(".cooldown").text();
-        cooldown = cooldown.replace(" seconds", "");
-        cooldown = cooldown.replace("Cooldown: ", "");
+        var cooldown = card.find(".cooldown-value").text();
         cooldown = parseFloat(cooldown) * 1000;
 
 
-        var description = card.find(".description").text();
+        var description = card.find(".description-value").text();
+        description = parseInt(description);
 
-        if (description.search("plus") > -1) {
-            description = description.replace("plus ", "");
-            description = parseInt(description);
+        // Just in case you click a "out of cards" card
+        if (description) {
             player.score = player.score + description;
-        } else if (description.search("minus") > -1) {
-            description = description.replace("minus ", "");
-            description = parseInt(description);
-            player.score = player.score - description;
-        } 
+        }
 
         refreshScore();
 
