@@ -1,10 +1,47 @@
 $(document).ready(function() {
 
     function init() {
-        initFastClick();
-        initGlobals();
-        initCards();
-        attachHandlers();
+        loadTemplates()
+        .then(function() {
+            initFastClick();
+            initGlobals();
+            initCards();
+            attachHandlers();
+        })
+        
+    }
+
+    function loadTemplates() {
+
+        var deferred = $.Deferred();
+
+        var files = [];
+
+        files.push("test");
+        files.push("test2");
+        files.push("card");
+
+        var filePromises = [];
+
+        $.each(files, function(key, value) {
+            filePromises.push($.get("views/" + value + ".tl"));
+        })
+
+        $.when.apply($, filePromises)
+        .then(function() {
+
+            $.each(arguments, function(key, value) {
+                var source = value[0];
+                var name = files[key];
+                var compiled = dust.compile(source, name);
+                dust.loadSource(compiled);
+            })
+
+            deferred.resolve();
+
+        })
+
+        return deferred;
     }
 
     function initFastClick() {
@@ -52,13 +89,15 @@ $(document).ready(function() {
             });
 
             shuffle(deck);
-            console.log("deck is " , deck);
             drawThreeCards();
 
         });
     }
 
     function drawThreeCards() {
+
+        $(".card-container").empty();
+        
         for (var i = 0; i<3; i++) {
 
             var domCards = $(".card");
@@ -71,27 +110,33 @@ $(document).ready(function() {
 
             var card = deck.pop();
 
-            $(domCards[i]).find("h2").text(card.name);
-            $(domCards[i]).find(".description").text(card.description);
-            $(domCards[i]).find(".cooldown").text("Cooldown: " + card.cooldown + " seconds");
-
+            dust.render('card', card, function(err, out){ 
+                $(".card-container").append(out);
+            });
         }
 
     }
 
     function drawCard(card) {
 
+        var newCard;
         if (deck.length == 0) {
-            $(card).find("h2").text("Out of cards");
-            $(card).find("p").text("");
+            newCard = {
+                name: "Out of Cards"
+            }
+            dust.render('card', newCard, function(err, out){ 
+                card.empty();
+                card.html($(out).html());
+            });
             return;
         }
 
-        var newCard = deck.pop();
+        newCard = deck.pop();
 
-        $(card).find("h2").text(newCard.name);
-        $(card).find(".description").text(newCard.description);
-        $(card).find(".cooldown").text("Cooldown: " + newCard.cooldown + " seconds");
+        dust.render('card', newCard, function(err, out){ 
+            card.empty();
+            card.html($(out).html());
+        });
     }
 
     function shuffle(o){
@@ -126,21 +171,18 @@ $(document).ready(function() {
             initCards();
         })
 
-        $(".card").click(function(e) {
+        $(".card-container").on("click", ".card", function(e) {
+
             if ($(e.target).is("button")) {
+                cardDiscardHandler(e);
                 return;
             }
 
             cardClickHandler(e);
         })
-
-        $(".card").find("button").click(function(e) {
-            cardDiscardHandler(e);
-        })
     }
 
     function cardClickHandler(e) {
-        console.log("in clicky")
         var card = $(e.target);
 
         if (card.is(':animated')) {
@@ -167,13 +209,15 @@ $(document).ready(function() {
 
         refreshScore();
 
+        card.removeClass("ready");
+
         card.animate({
             "opacity": 0
         }, 10, function() {
             drawCard(card);
             card.animate({
                 opacity: 1,
-            }, cooldown, function() {
+            }, cooldown, "easeInQuad", function() {
                 showCardReady(card);
             });
         });
@@ -190,6 +234,8 @@ $(document).ready(function() {
             return;
         }
 
+        card.removeClass("ready");
+
 
         card.animate({
             "opacity": 0
@@ -197,7 +243,7 @@ $(document).ready(function() {
             drawCard(card);
             card.animate({
                 opacity: 1,
-            }, player.cooldownLength);
+            }, player.cooldownLength, "easeInQuad");
         });
 
         discardText.animate({
@@ -205,7 +251,7 @@ $(document).ready(function() {
         }, 10, function() {
             discardText.animate({
                 opacity: 1,
-            }, player.cooldownLength, function() {
+            }, player.cooldownLength, "easeInQuad", function() {
                 showCardReady(card);
             });
         });
@@ -213,14 +259,14 @@ $(document).ready(function() {
     }
 
     function showCardReady(card) {
-        console.log("in show");
-        // TODO: Find something better like a border
-        card.animate({
-            "border": "-20"
-        }, 100)
+       card.addClass("ready");
+
+       card.animate({
+            "background-color": "#87795E"
+        }, 150)
         .animate({
-            "margin-top": 0
-        }, 100)
+            "background-color": "#1F1B15"
+        }, 150)
     }
 
     init();

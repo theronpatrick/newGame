@@ -3,17 +3,10 @@ html {
 }
 
 body {
-  padding: 30px;
+  padding: 15px;
   height: auto;
   /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#6b401b+0,4c261f+100 */
-  background: #6b401b;
-  /* Old browsers */
-  background: -moz-linear-gradient(top, #6b401b 0%, #4c261f 100%);
-  /* FF3.6-15 */
-  background: -webkit-linear-gradient(top, #6b401b 0%, #4c261f 100%);
-  /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom, #6b401b 0%, #4c261f 100%);
-  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  background-color: #15191f;
 }
 
 h1, h2, p {
@@ -39,14 +32,19 @@ h1, h2, p {
 }
 
 .card {
-  width: 250px;
+  width: 30%;
   height: 350px;
   border: 1px solid black;
+  cursor: pointer;
+  text-align: center;
   display: inline-block;
   vertical-align: top;
-  margin-right: 20px;
-  padding: 20px;
-  background-color: #212121;
+  margin-right: 2%;
+  padding: 5px;
+  background-color: #1f1b15;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 .card-container {
